@@ -1,3 +1,4 @@
+import re
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import Required, Email, Length, EqualTo, ValidationError
@@ -20,3 +21,8 @@ class RegisterForm(FlaskForm):
     confirm_password = PasswordField(validators=[Required(), EqualTo('password', message='Both password fields must be equal!')])
     pin_key = StringField(validators=[Required()])
     submit = SubmitField()
+
+    def validate_password(self, password):
+        p = re.compile(r'(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]')
+        if not p.match(self.password.data):
+            raise ValidationError("Password must contain at least 1 digit, 1 lowercase letter, 1 uppercase letter, and 1 special character.")
