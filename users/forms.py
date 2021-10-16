@@ -1,6 +1,6 @@
 import re
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField
+from wtforms import StringField, SubmitField, PasswordField, IntegerField
 from wtforms.validators import Required, Email, Length, EqualTo, ValidationError
 
 
@@ -37,4 +37,10 @@ class RegisterForm(FlaskForm):
 class LoginForm(FlaskForm):
     email = StringField(validators=[Required(), Email()])
     password = PasswordField(validators=[Required()])
+    pin = StringField(validators=[Required()])
     submit = SubmitField()
+
+    def validate_pin(self, pin):
+        pi = re.compile(r'^(?:\s*)\d{6}(?:\s*)$')
+        if not pi.match(self.pin.data):
+            raise ValidationError("PIN must only contain integers and have a length of 6.")
