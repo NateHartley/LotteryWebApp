@@ -67,7 +67,7 @@ def login():
 
         login_user(user)
 
-        return lottery()
+        return profile()
     return render_template('login.html', form=form)
 
 
