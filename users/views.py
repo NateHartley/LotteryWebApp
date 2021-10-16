@@ -3,7 +3,7 @@ import logging
 from functools import wraps
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import current_user
-from flask_login import login_user
+from flask_login import login_user, logout_user
 from app import db
 from lottery.views import lottery
 from models import User
@@ -69,6 +69,12 @@ def login():
 
         return profile()
     return render_template('login.html', form=form)
+
+
+@users_blueprint.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 
 # view user profile
