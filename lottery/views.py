@@ -4,11 +4,13 @@ import logging
 from flask import Blueprint, render_template, request, flash
 
 from app import db
-from models import Draw
+from models import Draw, User
 
 # CONFIG
 lottery_blueprint = Blueprint('lottery', __name__, template_folder='templates')
 
+#user = User.query.first()
+#draw_key = user.draw_key
 
 # VIEWS
 # view lottery page
@@ -16,7 +18,7 @@ lottery_blueprint = Blueprint('lottery', __name__, template_folder='templates')
 def lottery():
     return render_template('lottery.html')
 
-
+# NEED TO ADD DRAW_KEY HERE SOMEWHERE--------------------------------------------
 @lottery_blueprint.route('/add_draw', methods=['POST'])
 def add_draw():
     submitted_draw = ''
