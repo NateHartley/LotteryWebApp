@@ -32,3 +32,9 @@ class RegisterForm(FlaskForm):
         ph = re.compile(r'^(?:\s*)\d{4}-\d{3}-\d{4}(?:\s*)$')
         if not ph.match(self.phone.data):
             raise ValidationError("Phone must be in the format XXXX-XXX-XXXX (with the dashes)")
+
+
+class LoginForm(FlaskForm):
+    email = StringField(validators=[Required(), Email()])
+    password = PasswordField(validators=[Required()])
+    submit = SubmitField()

@@ -1,6 +1,6 @@
 import base64
 from datetime import datetime
-from flask_login import UserMixin
+from flask_login import LoginManager, UserMixin
 from werkzeug.security import generate_password_hash
 from cryptography.fernet import Fernet
 from app import db
