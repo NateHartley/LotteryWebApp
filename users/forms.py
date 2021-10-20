@@ -41,6 +41,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField()
 
     def validate_pin(self, pin):
-        pi = re.compile(r'^(?:\s*)\d{3}[\w ]\d{3}(?:\s*)$')
+        pi = re.compile(r'^(?:\s*)\d{6}(?:\s*)$')
+        # (r'^(?:\s*)\d{6}||\d{3}[\w ]\d{3}(?:\s*)$') should allow for 6 digits or 3 digits, space, then another 3 digits but lets anything through
         if not pi.match(self.pin.data):
-            raise ValidationError("PIN must only contain integers and have a length of 6 (with a space in the middle).")
+            raise ValidationError("PIN must only contain integers and have a length of 6.")
