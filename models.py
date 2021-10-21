@@ -8,12 +8,12 @@ from Crypto.Protocol.KDF import scrypt
 from Crypto.Random import get_random_bytes
 
 
-#def encrypt(data, draw_key):
-    #return Fernet(draw_key).encrypt(bytes(data, 'utf-8'))
+def encrypt(data, draw_key):
+    return Fernet(draw_key).encrypt(bytes(data, 'utf-8'))
 
 
-#def decrypt(data, draw_key):
-    #return Fernet(draw_key).decrypt(data).decode("utf-8")
+def decrypt(data, draw_key):
+    return Fernet(draw_key).decrypt(data).decode("utf-8")
 
 
 class User(db.Model, UserMixin):
@@ -67,25 +67,23 @@ class Draw(db.Model):
     match = db.Column(db.BOOLEAN, nullable=False, default=False)
     win = db.Column(db.BOOLEAN, nullable=False)
     round = db.Column(db.Integer, nullable=False, default=0)
+    draw_key = db.Column(db.BLOB)
 
     # def __init__(self, user_id, draw, win, round, draw_key):
-    def __init__(self, user_id, draw, win, round):
+    def __init__(self, user_id, draw, win, round, draw_key):
         self.user_id = user_id
-        self.draw = draw
-        # self.draw = encrypt(draw, draw_key)
+        self.draw = encrypt(draw, draw_key)
         self.played = False
         self.match = False
         self.win = win
         self.round = round
 
-    # Unsure whether draws need to have an update method
-    #def update_draw(self, draw, draw_key):
-        #self.draw = encrypt(draw, draw_key)
-        #db.session.commit()
+    def update_draw(self, draw, draw_key):
+        self.draw = encrypt(draw, draw_key)
+        db.session.commit()
 
-    # Unsure whether draws need to have a view method
-    #def view_post(self, draw_key):
-        #self.draw = decrypt(self.draw, draw_key)
+    def view_draw(self, draw_key):
+        self.draw = decrypt(self.draw, draw_key)
 
 
 def init_db():
