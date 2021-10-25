@@ -71,7 +71,7 @@ def login():
         # increase login attempts by 1
         session['logins'] += 1
 
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
 
         if not user or not check_password_hash(user.password, form.password.data):
             # if no match create appropriate error message based on login attempts
@@ -84,7 +84,7 @@ def login():
 
             return render_template('login.html', form=form)
 
-        if pyotp.TOTP(user.pinkey).verify(form.pinkey.data):
+        if pyotp.TOTP(user.pin_key).verify(form.pin.data):
 
             # if user is verified reset login attempts to 0
             session['logins'] = 0
