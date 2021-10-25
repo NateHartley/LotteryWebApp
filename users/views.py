@@ -17,6 +17,9 @@ from lottery.views import lottery
 # CONFIG
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
+user = User.query.first()
+draw_key = user.draw_key
+
 
 # VIEWS
 # view registration
