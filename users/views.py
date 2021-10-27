@@ -96,7 +96,12 @@ def login():
 
             db.session.add(user)
             db.session.commit()
-            return lottery()
+
+            # direct to role appropriate page
+            if current_user.role == 'admin':
+                return redirect(url_for('admin.admin'))
+            else:
+                return redirect(url_for('lottery.lottery'))
 
         else:
             flash("You have supplied an invalid 2FA token!", "danger")

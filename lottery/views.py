@@ -5,7 +5,7 @@ from cryptography.fernet import Fernet
 from flask import Blueprint, render_template, request, flash
 from flask_login import login_required, current_user
 from sqlalchemy import desc
-from app import db
+from app import db, requires_roles
 from models import Draw, User
 
 # CONFIG
@@ -20,6 +20,7 @@ def decrypt(data, draw_key):
 # view lottery page
 @lottery_blueprint.route('/lottery')
 @login_required
+@requires_roles('user')
 def lottery():
     #draws = Draw.query.order_by(desc('id')).all()
 
@@ -40,6 +41,7 @@ def lottery():
 # NEED TO ADD DRAW_KEY HERE SOMEWHERE--------------------------------------------
 @lottery_blueprint.route('/add_draw', methods=['POST'])
 @login_required
+@requires_roles('user')
 def add_draw():
     submitted_draw = ''
     for i in range(6):
@@ -61,6 +63,7 @@ def add_draw():
 # view all draws that have not been played
 @lottery_blueprint.route('/view_draws', methods=['POST'])
 @login_required
+@requires_roles('user')
 def view_draws():
     # get all draws that have not been played [played=0]
     playable_draws = Draw.query.filter_by(played=False, user_id=current_user.id).all()  # TODO: filter playable draws for current user
@@ -87,6 +90,7 @@ def view_draws():
 # view lottery results
 @lottery_blueprint.route('/check_draws', methods=['POST'])
 @login_required
+@requires_roles('user')
 def check_draws():
     # get played draws
     played_draws = Draw.query.filter_by(played=True, user_id=current_user.id).all()  # TODO: filter played draws for current user
@@ -112,6 +116,7 @@ def check_draws():
 # delete all played draws
 @lottery_blueprint.route('/play_again', methods=['POST'])
 @login_required
+@requires_roles('user')
 def play_again():
     delete_played = Draw.__table__.delete().where(Draw.played)  # TODO: delete played draws for current user only
     db.session.execute(delete_played)
