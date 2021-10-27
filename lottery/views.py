@@ -66,7 +66,7 @@ def add_draw():
 @requires_roles('user')
 def view_draws():
     # get all draws that have not been played [played=0]
-    playable_draws = Draw.query.filter_by(played=False, user_id=current_user.id).all()  # TODO: filter playable draws for current user
+    playable_draws = Draw.query.filter_by(played=False, user_id=current_user.id).all()
 
     # if playable draws exist
     if len(playable_draws) != 0:
@@ -93,7 +93,7 @@ def view_draws():
 @requires_roles('user')
 def check_draws():
     # get played draws
-    played_draws = Draw.query.filter_by(played=True, user_id=current_user.id).all()  # TODO: filter played draws for current user
+    played_draws = Draw.query.filter_by(played=True, user_id=current_user.id).all()
 
     # if played draws exist
     if len(played_draws) != 0:
@@ -118,8 +118,7 @@ def check_draws():
 @login_required
 @requires_roles('user')
 def play_again():
-    delete_played = Draw.__table__.delete().where(Draw.played)  # TODO: delete played draws for current user only
-    db.session.execute(delete_played)
+    delete_played = Draw.__table__.delete().where(Draw.played, user_id=current_user.id)
     db.session.commit()
 
     flash("All played draws deleted.")
