@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="lottery" uuid="1809ac07-6a4d-409e-9041-5ed8024882a7">
+    <data-source source="LOCAL" name="lottery [2]" uuid="8d56a13b-258c-4b0e-b7ab-a70d753840d4">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\annab\PycharmProjects\LotteryWebApp2\lottery.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/lottery.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>

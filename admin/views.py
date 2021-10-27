@@ -2,6 +2,7 @@
 from flask import Blueprint, render_template, request, flash
 from app import db
 from models import User, Draw
+from flask_login import current_user, login_required
 
 # CONFIG
 admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
@@ -10,12 +11,14 @@ admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
 # VIEWS
 # view admin homepage
 @admin_blueprint.route('/admin')
+@login_required
 def admin():
     return render_template('admin.html', name="PLACEHOLDER FOR FIRSTNAME")
 
 
 # view all registered users
 @admin_blueprint.route('/view_all_users', methods=['POST'])
+@login_required
 def view_all_users():
     return render_template('admin.html', name="PLACEHOLDER FOR FIRSTNAME",
                            current_users=User.query.filter_by(role='user').all())
@@ -23,6 +26,7 @@ def view_all_users():
 
 # create a new winning draw
 @admin_blueprint.route('/create_winning_draw', methods=['POST'])
+@login_required
 def create_winning_draw():
 
     # get current winning draw
@@ -46,7 +50,7 @@ def create_winning_draw():
     submitted_draw.strip()
 
     # create a new draw object with the form data.
-    new_winning_draw = Draw(user_id=0, draw=submitted_draw, win=True, round=round)
+    new_winning_draw = Draw(user_id=0, draw=submitted_draw, win=True, round=round, draw_key=current_user.draw_key)
 
     # add the new winning draw to the database
     db.session.add(new_winning_draw)
@@ -59,6 +63,7 @@ def create_winning_draw():
 
 # view current winning draw
 @admin_blueprint.route('/view_winning_draw', methods=['POST'])
+@login_required
 def view_winning_draw():
 
     # get winning draw from DB
@@ -76,6 +81,7 @@ def view_winning_draw():
 
 # view lottery results and winners
 @admin_blueprint.route('/run_lottery', methods=['POST'])
+@login_required
 def run_lottery():
 
     # get current unplayed winning draw
@@ -138,6 +144,7 @@ def run_lottery():
 
 # view last 10 log entries
 @admin_blueprint.route('/logs', methods=['POST'])
+@login_required
 def logs():
     with open("lottery.log", "r") as f:
         content = f.read().splitlines()[-10:]
