@@ -12,6 +12,7 @@ from models import User
 from users.forms import RegisterForm, LoginForm
 from werkzeug.security import check_password_hash
 from lottery.views import lottery
+from datetime import datetime
 
 
 # CONFIG
@@ -51,7 +52,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        logging.warning('SECURITY - User registration [%s, %s]', form.username.data, request.remote_addr)
+        logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
 
         # sends user to login page
         return redirect(url_for('users.login'))
@@ -96,12 +97,13 @@ def login():
 
             login_user(user)
 
-
+            user.last_logged_in = user.current_logged_in
+            user.current_logged_in = datetime.now()
 
             db.session.add(user)
             db.session.commit()
 
-            logging.warning('SECURITY - Log in [%s, %s, %s]', current_user.id, current_user.username,
+            logging.warning('SECURITY - Log in [%s, %s, %s]', current_user.id, current_user.email,
                             request.remote_addr)
 
             # direct to role appropriate page
@@ -119,7 +121,7 @@ def login():
 @users_blueprint.route('/logout')
 @login_required
 def logout():
-    logging.warning('SECURITY - Log out [%s, %s, %s]', current_user.id, current_user.username, request.remote_addr)
+    logging.warning('SECURITY - Log out [%s, %s, %s]', current_user.id, current_user.email, request.remote_addr)
     logout_user()
     return redirect(url_for('index'))
 
