@@ -1,12 +1,15 @@
 # IMPORTS
 from flask import Blueprint, render_template, request, flash
 from app import db, requires_roles
+from cryptography.fernet import Fernet
 from models import User, Draw
 from flask_login import current_user, login_required
 
 # CONFIG
 admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
 
+def decrypt(data, draw_key):
+    return Fernet(draw_key).decrypt(data).decode('utf-8')
 
 # VIEWS
 # view admin homepage
@@ -72,6 +75,9 @@ def view_winning_draw():
 
     # get winning draw from DB
     current_winning_draw = Draw.query.filter_by(win=True).first()
+    current_winning_draw_copy = current_winning_draw
+    current_winning_draw_copy.draw = decrypt(current_winning_draw_copy.draw, current_user.draw_key)
+
 
     # if a winning draw exists
     if current_winning_draw:

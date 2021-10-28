@@ -119,6 +119,8 @@ def check_draws():
 @requires_roles('user')
 def play_again():
     delete_played = Draw.__table__.delete().where(Draw.played, user_id=current_user.id)
+
+    db.session.execute(delete_played)
     db.session.commit()
 
     flash("All played draws deleted.")
