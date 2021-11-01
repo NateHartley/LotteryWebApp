@@ -1,7 +1,6 @@
 # IMPORTS
 import logging
 from functools import wraps
-
 import pyotp
 from flask import Blueprint, render_template, flash, redirect, url_for, request, session
 from flask_login import current_user
@@ -11,7 +10,6 @@ from lottery.views import lottery
 from models import User
 from users.forms import RegisterForm, LoginForm
 from werkzeug.security import check_password_hash
-from lottery.views import lottery
 from datetime import datetime
 
 

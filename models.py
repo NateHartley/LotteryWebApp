@@ -1,6 +1,6 @@
 import base64
 from datetime import datetime
-from flask_login import LoginManager, UserMixin
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash
 from cryptography.fernet import Fernet
 from app import db
@@ -108,4 +108,3 @@ def init_db():
     db.session.add(admin)
     db.session.add(test)
     db.session.commit()
-

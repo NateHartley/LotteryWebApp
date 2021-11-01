@@ -1,12 +1,10 @@
 # IMPORTS
 import copy
-import logging
 from cryptography.fernet import Fernet
 from flask import Blueprint, render_template, request, flash
 from flask_login import login_required, current_user
-from sqlalchemy import desc
 from app import db, requires_roles
-from models import Draw, User
+from models import Draw
 
 # CONFIG
 lottery_blueprint = Blueprint('lottery', __name__, template_folder='templates')
@@ -22,19 +20,6 @@ def decrypt(data, draw_key):
 @login_required
 @requires_roles('user')
 def lottery():
-    #draws = Draw.query.order_by(desc('id')).all()
-
-    # creates a list of copied draw objects which are independent of database.
-    #draw_copies = list(map(lambda x: copy.deepcopy(x), draws))
-
-    # empty list for decrypted coppied draw objects
-    #decrypted_draws = []
-
-    # decrypt each copied draw object and add it to decrypted_draw array.
-    #for d in draw_copies:
-    #    d.draw = decrypt(d.draw, current_user.draw_key)
-    #    decrypted_draws.append(d)
-
     return render_template('lottery.html')
 
 
@@ -49,7 +34,7 @@ def add_draw():
     submitted_draw.strip()
 
     # create a new draw with the form data.
-    new_draw = Draw(user_id=current_user.id, draw=submitted_draw, win=False, round=0, draw_key=current_user.draw_key)  # TODO: update user_id [user_id=1 is a placeholder]
+    new_draw = Draw(user_id=current_user.id, draw=submitted_draw, win=False, round=0, draw_key=current_user.draw_key)
 
     # add the new draw to the database
     db.session.add(new_draw)
@@ -72,8 +57,10 @@ def view_draws():
     if len(playable_draws) != 0:
         # re-render lottery page with playable draws
 
+        # creates a list of copied draw objects which are independent of database.
         draw_copies = list(map(lambda x: copy.deepcopy(x), playable_draws))
 
+        # empty list for decrypted coppied draw objects
         decrypted_draws = []
 
         # decrypt each copied draw object and add it to decrypted_draw array.

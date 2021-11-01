@@ -1,6 +1,6 @@
 import re
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, IntegerField
+from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import Required, Email, Length, EqualTo, ValidationError
 
 
@@ -26,7 +26,6 @@ class RegisterForm(FlaskForm):
         p = re.compile(r'(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]')
         if not p.match(self.password.data):
             raise ValidationError("Password must contain at least 1 digit, 1 lowercase letter, 1 uppercase letter, and 1 special character.")
-
 
     def validate_phone(self, phone):
         ph = re.compile(r'^(?:\s*)\d{4}-\d{3}-\d{4}(?:\s*)$')
