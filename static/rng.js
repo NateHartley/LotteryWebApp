@@ -6,9 +6,6 @@ function luckyDip() {
 
     // while set does not contain 6 values, create a random value between 1 and 60
     while (draw.size < 6) {
-        min = Math.ceil(1);
-        max = Math.floor(60);
-        value = Math.floor(Math.random() * (max - min + 1) + min);
         let randomBuffer = new Uint32Array(1);
         window.crypto.getRandomValues(randomBuffer)
         let randomNumber = randomBuffer[0] / (0xFFFFFFFF);
