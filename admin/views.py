@@ -102,6 +102,7 @@ def run_lottery():
 
     # if current unplayed winning draw exists
     if current_winning_draw:
+        current_winning_draw.view_draw(current_user.draw_key)
 
         # get all unplayed user draws
         user_draws = Draw.query.filter_by(win=False, played=False).all()
@@ -120,6 +121,7 @@ def run_lottery():
 
                 # get the owning user (instance/object)
                 user = User.query.filter_by(id=draw.user_id).first()
+                draw.view_draw(user.draw_key)
 
                 # if user draw matches current unplayed winning draw
                 if draw.draw == current_winning_draw.draw:
