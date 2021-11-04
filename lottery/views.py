@@ -90,9 +90,9 @@ def check_draws():
 
         # decrypt each copied draw object and add it to decrypted_draw array.
         for d in draw_copies:
-            d.draw = decrypt(d.draw, current_user.draw_key)
+            d.draw = d.view_draw(current_user.draw_key)
             decrypted_draws.append(d)
-        return render_template('lottery.html', results=played_draws, played=True)
+        return render_template('lottery.html', results=decrypted_draws, played=True)
 
     # if no played draws exist [all draw entries have been played therefore wait for next lottery round]
     else:
@@ -105,7 +105,7 @@ def check_draws():
 @login_required
 @requires_roles('user')
 def play_again():
-    delete_played = Draw.__table__.delete().where(Draw.played, user_id=current_user.id)  # doesnt like user_id
+    delete_played = Draw.__table__.delete().where(Draw.played, Draw.user_id==current_user.id)  # doesnt like user_id
 
     db.session.execute(delete_played)
     db.session.commit()

@@ -1,0 +1,7 @@
+11/04/2021 11:26:30 AM : SECURITY - Log out [1, admin@email.com, 127.0.0.1]
+11/04/2021 11:26:49 AM : SECURITY - Log in [2, test@email.com, 127.0.0.1]
+11/04/2021 11:27:01 AM : SECURITY - Log out [2, test@email.com, 127.0.0.1]
+11/04/2021 11:27:18 AM : SECURITY - Log in [1, admin@email.com, 127.0.0.1]
+11/04/2021 11:27:38 AM : SECURITY - Unauthorised access attempt [1, Alice, user, 127.0.0.1]
+11/04/2021 11:28:19 AM : SECURITY - Unauthorised access attempt [1, Alice, admin, 127.0.0.1]
+11/04/2021 11:28:42 AM : SECURITY - Unauthorised access attempt [1, Alice, user, 127.0.0.1]

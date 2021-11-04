@@ -67,7 +67,6 @@ class Draw(db.Model):
     match = db.Column(db.BOOLEAN, nullable=False, default=False)
     win = db.Column(db.BOOLEAN, nullable=False)
     round = db.Column(db.Integer, nullable=False, default=0)
-    draw_key = db.Column(db.BLOB)
 
     # def __init__(self, user_id, draw, win, round, draw_key):
     def __init__(self, user_id, draw, win, round, draw_key):
@@ -83,7 +82,7 @@ class Draw(db.Model):
         db.session.commit()
 
     def view_draw(self, draw_key):
-        self.draw = decrypt(self.draw, draw_key)
+        return decrypt(self.draw, draw_key)
 
 
 def init_db():

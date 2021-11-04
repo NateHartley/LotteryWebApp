@@ -1,4 +1,6 @@
 # IMPORTS
+import copy
+
 from flask import Blueprint, render_template, request, flash
 from app import db, requires_roles
 from cryptography.fernet import Fernet
@@ -103,6 +105,11 @@ def run_lottery():
     # if current unplayed winning draw exists
     if current_winning_draw:
 
+        current_winning_draw_copy = copy.deepcopy(current_winning_draw)
+
+        current_winning_draw_copy.draw = current_winning_draw_copy.view_draw(
+            draw_key=User.query.filter_by(id=1).first().draw_key)
+
         # get all unplayed user draws
         user_draws = Draw.query.filter_by(win=False, played=False).all()
         results = []
@@ -121,11 +128,15 @@ def run_lottery():
                 # get the owning user (instance/object)
                 user = User.query.filter_by(id=draw.user_id).first()
 
+                draw_copy = copy.deepcopy(draw)
+
+                draw_copy.draw = draw_copy.view_draw(draw_key=user.draw_key)
+
                 # if user draw matches current unplayed winning draw
-                if draw.draw == current_winning_draw.draw:
+                if draw_copy.draw == current_winning_draw_copy.draw:
 
                     # add details of winner to list of results
-                    results.append((current_winning_draw.round, draw.draw, draw.user_id, user.email))
+                    results.append((current_winning_draw.round, draw_copy.draw, draw.user_id, user.email))
 
                     # update draw as a winning draw (this will be used to highlight winning draws in the user's
                     # lottery page)
