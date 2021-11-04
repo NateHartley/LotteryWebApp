@@ -83,7 +83,7 @@ def view_winning_draw():
     # if a winning draw exists
     if current_winning_draw:
         # re-render admin page with current winning draw and lottery round
-        return render_template('admin.html', winning_draw=current_winning_draw, name=current_user.firstname)
+        return render_template('admin.html', winning_draw=current_winning_draw_copy, name=current_user.firstname)
     # not sure if current_user.firstname should be used here, same goes for all of them in admin.html
 
     # if no winning draw exists, rerender admin page
@@ -102,7 +102,6 @@ def run_lottery():
 
     # if current unplayed winning draw exists
     if current_winning_draw:
-        current_winning_draw.view_draw(current_user.draw_key)
 
         # get all unplayed user draws
         user_draws = Draw.query.filter_by(win=False, played=False).all()
@@ -121,7 +120,6 @@ def run_lottery():
 
                 # get the owning user (instance/object)
                 user = User.query.filter_by(id=draw.user_id).first()
-                draw.view_draw(user.draw_key)
 
                 # if user draw matches current unplayed winning draw
                 if draw.draw == current_winning_draw.draw:
